@@ -1,0 +1,145 @@
+//Warren Han
+//CSE 142
+// Section: AR
+// TA: Amelia
+/* This program takes user input of monthly income and either monthly or 
+ daily expenses and number of income/expense catagories to determine
+net spending and prints out net expenses/income and a message according to how much is spent/earned */
+import java.util.*;
+
+
+public class Budgeter{
+   
+   public static final int DAYS = 31;
+   
+   public static void main(String[] args){
+      Scanner console = new Scanner(System.in);   
+      
+      intro();
+      double netIncome = income(console);  
+      double netExpenses = dailyOrMonthly(console);
+      netIncome = roundingMachine(netIncome);
+      netExpenses = roundingMachine(netExpenses);
+      
+      sentances(netIncome, netExpenses);
+        
+   }
+   
+   // Prints out the introduction to the budgeter
+   public static void intro(){
+      
+      System.out.println("This program asks for your monthly income and");
+      System.out.println("expenses, then tells you your net monthly income.");
+      System.out.println();
+      System.out.print("How many categories of income? ");
+      
+   }
+   
+   // Parameter(console which is user input)
+   // Takes user input and returns the sum of the of
+   // the incomes
+   public static double income(Scanner console){       
+            
+      int catagories = console.nextInt();
+      double sum = 0.0;
+               
+         for(int i = 1; i <= catagories; i++){
+            System.out.print("    Next income amount? $");
+            sum = sum + console.nextDouble();
+         }
+      System.out.println();
+         
+      
+      return sum;
+        
+   }
+    
+    // This method takes in user input and sums that input
+    // returning the sum
+    public static double expenses(Scanner console){    
+       System.out.print("How many categories of expense? ");
+       int expenses = console.nextInt(); 
+      
+       double sum = 0.00;
+          for (int i = 1; i <= expenses; i++){
+             System.out.print("    Next expense amount? $");
+           
+             sum = sum + console.nextDouble();
+          }
+                
+         
+      return sum;
+      
+      
+      }
+      
+      // Parameters(console which takes user input)
+      // Takes in user input as either a 1 or 2 and 
+      // calls expenses method in both cases
+      // returns either monthly expenses which = net expenses or
+      // return daily expenses which is multiplied by DAYS (31)
+      // to = net monthly expenses.
+      public static double dailyOrMonthly(Scanner console){ 
+         System.out.print("Enter 1) monthly or 2) daily expenses? ");
+         int monthlyOrDaily = console.nextInt();
+         if(monthlyOrDaily == 1){ // monthly
+            double expensesMonthly = expenses(console);
+            return expensesMonthly;             
+         } else { //daily
+            double expensesDaily = expenses(console);
+            return expensesDaily * DAYS;
+         } 
+       }
+       
+       // Parameters(a double value)
+       // A double is passed into this method and is returned as a 
+       // double rounded to the hundreds place.
+       public static double roundingMachine(double num) {
+      
+         return Math.round(num * 100) / 100.0;
+      
+       }
+      
+      // Parameters (calculated Net Income and Net Expenses from income and dailyOrMonthly methods)
+      // Final Int DAYS also passed into the method
+      // Prints total income and expenses; Prints daily income and daily expenses
+      // Calculates the amount spent verus amount earned and return the appropriate response
+      // Custom message printed on the bottem
+      public static void sentances(double netIncome, double netExpenses){
+         double perDayIncome = roundingMachine(netIncome / DAYS);
+         double perDayExpenses = roundingMachine(netExpenses / DAYS);
+         double netI = roundingMachine(netIncome);
+         double netE = roundingMachine(netExpenses);
+      
+         System.out.println();
+         System.out.println("Total income = $" + netI + " ($" + perDayIncome + "/day)");
+         System.out.println("Total expenses = $" + netE + " ($" + perDayExpenses + "/day)");
+         System.out.println();   
+                                         
+         double totalSpent = netIncome - netExpenses;
+         totalSpent = roundingMachine(totalSpent);
+         
+      
+         if( totalSpent <= 0){
+            System.out.println("You spent $" + Math.abs(totalSpent) + " more than you earned this month.");
+         } else{
+            System.out.println("You earned $" + totalSpent + " more than you spent this month.");
+         }
+         if(totalSpent > 250){
+            System.out.println("You're a big saver."); 
+             System.out.println("Really smart ballers do really smart baller things");
+    
+         } else if(totalSpent <= 250 && totalSpent > 0){
+            System.out.println("You're a saver.");
+            System.out.println("Smart ballers do smart baller things");
+         } else if(totalSpent > -250 && totalSpent <= 0){
+            System.out.println("You're a spender.");
+             System.out.println("Small ballers do small baller things");
+         } else{
+            System.out.println("You're a big spender.");
+            System.out.println("Big ballers do big baller things");
+         }
+         
+      }
+
+} 
